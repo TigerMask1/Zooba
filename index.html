@@ -4,38 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zooba Level Upgrade Cost Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Fonts: Poppins for bold, game-like headers & Inter for clean text -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for creative buttons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         /* BASE STYLES & THEME VARIABLES */
         :root {
-            --zooba-blue: #37A2FF;
-            --zooba-orange: #FF7B00;
-            --zooba-green: #37D300;
-            --zooba-red: #FF3737;
-            --zooba-card-bg: rgba(255, 255, 255, 0.95);
-            --zooba-dark-bg: #1a1a2e;
-            --zooba-dark-card-bg: #2d2d44;
+            --zooba-primary: #FF7B00; /* Orange/Gold */
+            --zooba-secondary: #37A2FF; /* Blue */
+            --zooba-accent: #37D300; /* Green */
+            --zooba-card-bg-light: rgba(255, 255, 255, 0.95);
+            --zooba-card-bg-dark: #2d2d44;
             --text-color: #333;
-            --shadow-light: 0 10px 20px rgba(0, 0, 0, 0.2);
-            --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.4);
-            --border-radius-large: 25px;
-            --transition-speed: 0.3s;
+            --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.2);
+            --shadow-heavy: 0 15px 30px rgba(0, 0, 0, 0.4);
+            --border-radius-xl: 30px;
+            --transition-speed: 0.2s;
         }
 
         /* DARK MODE */
         .dark-mode {
-            background-color: var(--zooba-dark-bg);
+            background-color: #1a1a2e;
             color: #f0f0f0;
-            --zooba-card-bg: var(--zooba-dark-card-bg);
+            --zooba-card-bg-light: var(--zooba-card-bg-dark);
             --text-color: #f0f0f0;
-            --shadow-light: 0 10px 20px rgba(0, 0, 0, 0.6);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -43,80 +43,69 @@
             background-attachment: fixed;
             transition: background-color var(--transition-speed);
             color: var(--text-color);
+            min-height: 100vh;
         }
 
         /* ANIMATIONS */
 
-        /* 1. Floating Particles */
+        /* Floating Particles - Enhanced */
         @keyframes float {
-            0% { transform: translate(0, 0); opacity: 0.5; }
-            50% { transform: translate(-10px, 10px); opacity: 1; }
-            100% { transform: translate(0, 0); opacity: 0.5; }
+            0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            50% { transform: translate(-15px, 15px) scale(1.1); opacity: 1; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
         }
 
         .particle {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 10px;
+            height: 10px;
             background-color: rgba(255, 215, 0, 0.7); /* Gold/Coin color */
             border-radius: 50%;
             pointer-events: none;
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.8);
             animation: float 10s infinite ease-in-out;
             z-index: -1;
         }
 
-        /* 2. Header Fade/Zoom */
+        /* Header Fade/Zoom */
         @keyframes header-fade-zoom {
-            from { opacity: 0; transform: scale(1.05); }
+            from { opacity: 0; transform: scale(1.03); }
             to { opacity: 1; transform: scale(1); }
         }
 
-        header {
-            animation: header-fade-zoom 1s ease-out forwards;
-        }
-
-        /* 3. Button Hover Bounce */
-        .zooba-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), 0 0 15px var(--zooba-blue);
-        }
-
-        .zooba-btn:active {
-            transform: translateY(1px) scale(0.98);
-        }
-        
         /* HEADER SECTION */
         header {
             text-align: center;
             padding: 60px 20px 40px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="blur"><feGaussianBlur stdDeviation="3"/></filter></defs><rect width="100" height="100" fill="%232d2d44"/></svg>'); /* Placeholder background */
+            /* Placeholder for blurred Zooba map image - Replace with a base64 image or a specific Zooba-themed CSS pattern */
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                              url('https://placehold.co/1200x400/1e3c72/ffffff/blur?text=Blurred+Zooba+Map'); /* Placeholder */
             background-size: cover;
             background-position: center;
-            border-bottom-left-radius: var(--border-radius-large);
-            border-bottom-right-radius: var(--border-radius-large);
+            border-bottom-left-radius: var(--border-radius-xl);
+            border-bottom-right-radius: var(--border-radius-xl);
             color: white;
             position: relative;
             overflow: hidden;
             z-index: 10;
-        }
-
-        .header-content {
-            position: relative;
-            z-index: 2;
+            animation: header-fade-zoom 1s ease-out forwards;
         }
 
         h1 {
-            font-size: 3em;
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5em, 5vw, 4em);
             font-weight: 900;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            color: var(--zooba-orange);
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+            color: var(--zooba-primary);
             letter-spacing: 2px;
+            line-height: 1.1;
         }
 
         header p {
-            font-size: 1.2em;
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(1em, 2vw, 1.2em);
             margin-top: 10px;
-            font-weight: 700;
+            font-weight: 400;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
         }
         
@@ -129,19 +118,20 @@
         }
 
         .zooba-card {
-            background: var(--zooba-card-bg);
+            background: var(--zooba-card-bg-light);
             padding: 30px;
-            border-radius: var(--border-radius-large);
+            border-radius: var(--border-radius-xl);
             box-shadow: var(--shadow-heavy);
             width: 100%;
-            max-width: 600px;
+            max-width: 650px;
             margin-bottom: 40px;
-            border: 5px solid var(--zooba-blue);
-            transition: background var(--transition-speed);
+            border: 8px solid var(--zooba-secondary); /* Thicker, more prominent border */
+            transition: background var(--transition-speed), border-color var(--transition-speed);
         }
 
         h2 {
-            color: var(--zooba-orange);
+            font-family: 'Poppins', sans-serif;
+            color: var(--zooba-primary);
             text-align: center;
             margin-bottom: 25px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
@@ -151,7 +141,7 @@
         .controls-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 25px;
         }
 
@@ -162,93 +152,81 @@
 
         label {
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: var(--text-color);
+            display: block;
         }
 
-        select, .zooba-btn, input[type="checkbox"] {
+        select {
             border-radius: 12px;
             padding: 12px;
             font-size: 1em;
             font-weight: 700;
-            border: 3px solid var(--zooba-blue);
-            background-color: #f7f7f7;
+            border: 3px solid var(--zooba-primary);
+            background-color: #f0f0f0;
             color: var(--text-color);
             appearance: none;
             cursor: pointer;
             transition: all var(--transition-speed);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .dark-mode select {
+            background-color: #3f3f60;
+            border-color: var(--zooba-primary);
+            color: #f0f0f0;
         }
 
+        /* Dropdown Icon Styling */
         select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FF7B00' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 1em;
         }
 
-        /* CHECKBOX STYLING */
+        /* CHECKBOX STYLING (Glossy Toggle) */
         .checkbox-group {
             grid-column: span 2;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px;
+            background: rgba(55, 162, 255, 0.1);
+            border: 2px solid var(--zooba-secondary);
+            border-radius: 15px;
         }
 
         .zooba-checkbox {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 28px;
+            width: 60px;
+            height: 34px;
             margin-right: 15px;
         }
 
-        .zooba-checkbox input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
         .zooba-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
             background-color: #ccc;
-            transition: var(--transition-speed);
-            border-radius: 28px;
-        }
-
-        .zooba-slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: var(--transition-speed);
-            border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border: 2px solid #aaa;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
         }
 
         input:checked + .zooba-slider {
-            background-color: var(--zooba-green);
+            background: linear-gradient(145deg, var(--zooba-accent), #209900);
+            box-shadow: 0 0 8px var(--zooba-accent);
         }
 
         input:checked + .zooba-slider:before {
-            transform: translateX(22px);
+            transform: translateX(26px);
+            background: white;
+            box-shadow: 0 0 10px white;
         }
 
         .checkbox-label {
             font-weight: 700;
-            color: var(--zooba-blue);
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+            color: var(--zooba-secondary);
         }
 
-        /* BUTTONS */
+        /* CREATIVE BUTTONS (WITH ICONS & GLOW) */
         .action-buttons {
             display: flex;
             gap: 15px;
@@ -260,47 +238,84 @@
             text-align: center;
             border: none;
             color: white;
-            background: var(--zooba-orange);
-            box-shadow: 0 4px 0 var(--zooba-red);
-            padding: 14px;
+            padding: 16px 10px;
+            font-family: 'Poppins', sans-serif;
             font-size: 1.1em;
             font-weight: 900;
             letter-spacing: 1px;
+            border-radius: 15px;
+            cursor: pointer;
             transition: all var(--transition-speed);
+            text-transform: uppercase;
+            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4);
+            position: relative;
         }
         
-        #calculate-btn {
-            background: var(--zooba-blue);
-            box-shadow: 0 4px 0 #287ecb;
+        .zooba-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 rgba(0, 0, 0, 0.4);
         }
+        
+        .zooba-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        #max-level-btn {
+            background: linear-gradient(135deg, var(--zooba-primary), #d86900);
+            box-shadow: 0 6px 0 #9c4b00;
+        }
+        #max-level-btn:hover {
+            box-shadow: 0 8px 20px rgba(255, 123, 0, 0.7);
+        }
+
+        #calculate-btn {
+            background: linear-gradient(135deg, var(--zooba-secondary), #287ecb);
+            box-shadow: 0 6px 0 #1e6091;
+        }
+        #calculate-btn:hover {
+            box-shadow: 0 8px 20px rgba(55, 162, 255, 0.7);
+        }
+        
+        .zooba-btn i {
+            margin-right: 8px;
+        }
+
 
         /* RESULTS SECTION */
         #results-container {
             margin-top: 30px;
             overflow: hidden;
             max-height: 0;
-            transition: max-height 0.5s ease-in-out;
+            transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* Elastic slide up */
         }
 
         .results-box {
-            background-color: #fce4ec; /* Light Pink Accent */
-            background: linear-gradient(45deg, #fff0f5, #fce4ec);
-            border: 4px solid var(--zooba-red);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: var(--shadow-light);
+            background: linear-gradient(180deg, #fff0f5, #fce4ec);
+            border: 4px solid var(--zooba-primary);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 0 15px rgba(255, 123, 0, 0.3);
             transition: background var(--transition-speed);
         }
         .dark-mode .results-box {
-            background: linear-gradient(45deg, #3c2020, #4d2a2a);
-            border-color: var(--zooba-red);
+            background: linear-gradient(180deg, #3c2020, #4d2a2a);
+            border-color: var(--zooba-primary);
+        }
+
+        .result-header {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--zooba-secondary);
         }
 
         .result-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 10px 0;
             border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
             font-size: 1.1em;
             opacity: 0;
@@ -309,141 +324,80 @@
             border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
         }
 
-        .result-item:last-child {
-            border-bottom: none;
-        }
-
         .result-label {
             font-weight: 700;
-            color: var(--zooba-blue);
+            color: var(--zooba-secondary);
         }
 
         .result-value {
             font-weight: 900;
-            color: var(--zooba-orange);
-            font-size: 1.2em;
+            color: var(--zooba-primary);
+            font-size: 1.3em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
+        .result-value i { margin-right: 5px; }
 
         .final-total {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 3px solid var(--zooba-red);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 3px solid var(--zooba-accent);
         }
 
         .final-total .result-label {
-            font-size: 1.5em;
-            color: var(--zooba-red);
+            font-size: 1.6em;
+            color: var(--zooba-accent);
         }
         .final-total .result-value {
-            font-size: 1.6em;
-            color: var(--zooba-green);
+            font-size: 1.8em;
+            color: var(--zooba-accent);
         }
-
+        
+        /* REWARDS BOX */
         #free-rewards-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: rgba(55, 162, 255, 0.1);
-            border-radius: 15px;
-            border: 2px solid var(--zooba-blue);
+            margin-top: 25px;
+            padding: 18px;
+            background-color: rgba(55, 211, 0, 0.1);
+            border-radius: 20px;
+            border: 2px solid var(--zooba-accent);
         }
         
         #free-rewards-box h4 {
-            color: var(--zooba-blue);
+            color: var(--zooba-accent);
             margin-bottom: 10px;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
         
         #free-rewards-list {
-            list-style: none;
-            padding-left: 0;
+            list-style-type: '🎁 ';
+            padding-left: 20px;
         }
 
         #free-rewards-list li {
             padding: 5px 0;
             font-weight: 500;
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateX(-10px);
             transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-        }
-        
-        /* FULL LEVEL TABLE */
-        .table-section {
-            width: 90%;
-            max-width: 900px;
-            margin-top: 50px;
-            padding: 20px;
-            background: var(--zooba-card-bg);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-light);
-            border: 5px solid var(--zooba-green);
-            transition: background var(--transition-speed);
-        }
-
-        .table-wrapper {
-            max-height: 400px;
-            overflow-y: auto;
-            border-radius: 15px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .level-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
-            text-align: left;
-        }
-
-        .level-table th, .level-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
-            color: var(--text-color);
-        }
-
-        .dark-mode .level-table th, .dark-mode .level-table td {
-            border-bottom: 1px solid #444;
-            color: #f0f0f0;
-        }
-
-        .level-table th {
-            background-color: var(--zooba-green);
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .level-table tbody tr:nth-child(even) {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
-
-        .dark-mode .level-table tbody tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .table-notes {
-            font-style: italic;
-            font-size: 0.85em;
-            color: var(--zooba-blue);
         }
         
         /* PROGRESS BAR */
         #progress-bar-container {
             margin-top: 15px;
-            padding: 8px;
+            padding: 6px;
             background-color: #ccc;
             border-radius: 15px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
             position: relative;
+            margin-bottom: 20px;
         }
 
         #progress-bar {
-            height: 15px;
+            height: 18px;
             width: 0%;
-            background: linear-gradient(to right, var(--zooba-blue), var(--zooba-green));
-            border-radius: 15px;
+            background: linear-gradient(to right, var(--zooba-secondary), var(--zooba-accent));
+            border-radius: 12px;
             transition: width 1s ease-out;
+            box-shadow: 0 0 10px rgba(55, 162, 255, 0.5);
         }
 
         #progress-text {
@@ -454,7 +408,69 @@
             font-weight: 900;
             color: white;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            font-size: 0.8em;
+            font-size: 0.9em;
+        }
+        
+        /* FULL LEVEL TABLE */
+        .table-section {
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 50px;
+            padding: 25px;
+            background: var(--zooba-card-bg-light);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-light);
+            border: 5px solid var(--zooba-accent);
+            transition: background var(--transition-speed);
+        }
+
+        .table-wrapper {
+            max-height: 450px;
+            overflow-y: auto;
+            border-radius: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .level-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+            text-align: left;
+        }
+
+        .level-table th, .level-table td {
+            padding: 15px 15px;
+            border-bottom: 1px solid #ddd;
+            color: var(--text-color);
+        }
+
+        .dark-mode .level-table th, .dark-mode .level-table td {
+            border-bottom: 1px solid #444;
+            color: #f0f0f0;
+        }
+
+        .level-table th {
+            background-color: var(--zooba-primary);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .level-table tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .level-table tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .table-notes {
+            font-style: italic;
+            font-size: 0.9em;
+            color: var(--zooba-secondary);
         }
         
         /* FOOTER & EXTRA FEATURES */
@@ -472,91 +488,96 @@
         }
 
         .footer-btn {
-            background: linear-gradient(45deg, var(--zooba-blue), #287ecb);
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
             color: white;
-            padding: 10px 25px;
-            border-radius: 15px;
+            padding: 12px 28px;
+            border-radius: 18px;
             text-decoration: none;
             font-weight: 700;
             transition: all var(--transition-speed);
-            box-shadow: 0 4px 0 #1e6091;
+            box-shadow: 0 4px 0 #122445;
         }
 
         .footer-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 0 #1e6091, 0 0 10px var(--zooba-blue);
+            box-shadow: 0 6px 0 #122445, 0 0 10px var(--zooba-secondary);
         }
 
         .extra-features {
-            margin-top: 20px;
+            margin-top: -20px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .feature-btn {
-            background-color: var(--zooba-card-bg);
-            border: 2px solid var(--zooba-orange);
-            color: var(--zooba-orange);
-            padding: 8px 15px;
-            border-radius: 12px;
+            background-color: var(--zooba-card-bg-light);
+            border: 2px solid var(--zooba-primary);
+            color: var(--zooba-primary);
+            padding: 10px 18px;
+            border-radius: 15px;
             font-weight: 700;
             cursor: pointer;
             transition: all var(--transition-speed);
         }
         .feature-btn:hover {
-            background-color: var(--zooba-orange);
+            background-color: var(--zooba-primary);
             color: white;
             transform: scale(1.05);
+            box-shadow: 0 0 10px var(--zooba-primary);
         }
         .dark-mode .feature-btn {
             background-color: var(--zooba-dark-card-bg);
-            color: var(--zooba-orange);
+            color: var(--zooba-primary);
         }
         
         /* UTILITIES */
         .hidden { display: none !important; }
         
         /* MEDIA QUERIES */
-        @media (max-width: 650px) {
-            h1 { font-size: 2.2em; }
-            header p { font-size: 1em; }
+        @media (max-width: 700px) {
             .controls-grid { grid-template-columns: 1fr; }
             .checkbox-group { grid-column: span 1; }
             .action-buttons { flex-direction: column; }
-            .table-wrapper { font-size: 0.8em; }
-            .level-table th, .level-table td { padding: 8px 10px; }
+            .level-table th, .level-table td { padding: 10px 8px; font-size: 0.85em; }
+            .result-label, .result-value { font-size: 1em !important; }
+            .final-total .result-label { font-size: 1.3em !important; }
+            .final-total .result-value { font-size: 1.4em !important; }
+            .extra-features { justify-content: space-around; }
         }
     </style>
 </head>
 <body>
 
+    <!-- FLOATING PARTICLES (Coins/Tokens) -->
     <div id="particle-container"></div>
     
+    <!-- HEADER SECTION -->
     <header>
-        <div class="header-content">
-            <div class="extra-features">
-                <button class="feature-btn" id="theme-toggle">🌙 Toggle Dark Mode</button>
-                <button class="feature-btn" id="save-level-btn">💾 Save My Level</button>
-                <button class="feature-btn" id="share-results-btn" style="display: none;">🔗 Share Results</button>
-            </div>
-            <h1>Zooba Level Upgrade Cost Calculator</h1>
-            <p>Calculate tokens, coin costs & free rewards from any level to any level.</p>
+        <div class="extra-features">
+            <button class="feature-btn" id="theme-toggle"><i class="fas fa-moon"></i> Toggle Dark Mode</button>
+            <button class="feature-btn" id="save-level-btn"><i class="fas fa-save"></i> Save My Level</button>
+            <button class="feature-btn hidden" id="share-results-btn"><i class="fas fa-share-alt"></i> Share Results</button>
         </div>
+        <h1>Zooba Level Upgrade Cost Calculator</h1>
+        <p>Calculate tokens, coin costs & free rewards from any level to any level.</p>
     </header>
 
     <main>
+        <!-- CALCULATOR SECTION (MAIN TOOL) -->
         <div class="zooba-card">
-            <h2>🎯 Level Cost Calculator</h2>
+            <h2>🎯 Path Planner: Choose Your Destiny</h2>
             
             <div class="controls-grid">
                 <div class="input-group">
-                    <label for="current-level">Current Level</label>
+                    <label for="current-level"><i class="fas fa-trophy"></i> Current Level</label>
                     <select id="current-level"></select>
                 </div>
                 
                 <div class="input-group">
-                    <label for="target-level">Target Level</label>
+                    <label for="target-level"><i class="fas fa-crosshairs"></i> Target Level</label>
                     <select id="target-level"></select>
                 </div>
 
@@ -565,18 +586,19 @@
                         <input type="checkbox" id="include-optional-upgrades" checked>
                         <span class="zooba-slider"></span>
                     </label>
-                    <span class="checkbox-label">Include Optional Upgrades?</span>
+                    <span class="checkbox-label">Include Optional Upgrades (Skins, Emotes, Slots)?</span>
                 </div>
             </div>
 
             <div class="action-buttons">
-                <button class="zooba-btn" id="max-level-btn">MAX LEVEL (20)</button>
-                <button class="zooba-btn" id="calculate-btn">CALCULATE</button>
+                <button class="zooba-btn" id="max-level-btn"><i class="fas fa-bolt"></i> MAX LEVEL (20)</button>
+                <button class="zooba-btn" id="calculate-btn"><i class="fas fa-lightbulb"></i> CALCULATE COST</button>
             </div>
 
+            <!-- RESULTS DISPLAY SECTION -->
             <div id="results-container">
                 <div class="results-box">
-                    <p style="text-align: center; font-weight: 700; margin-bottom: 10px;">✅ Calculating From: <span id="level-path">Lvl X → Lvl Y</span></p>
+                    <p class="result-header">✅ Calculating From: <span id="level-path">Lvl X → Lvl Y</span></p>
 
                     <div id="progress-bar-container">
                         <div id="progress-bar"></div>
@@ -585,19 +607,19 @@
 
                     <div id="results-list">
                         <div class="result-item" data-result="tokens">
-                            <span class="result-label">🎯 Tokens Needed:</span>
+                            <span class="result-label"><i class="fas fa-star"></i> Tokens Needed:</span>
                             <span class="result-value" data-final="0">0</span>
                         </div>
                         <div class="result-item" data-result="necessary">
-                            <span class="result-label">💰 Necessary Coins:</span>
+                            <span class="result-label"><i class="fas fa-coins"></i> Necessary Coins:</span>
                             <span class="result-value" data-final="0">0</span>
                         </div>
                         <div class="result-item" data-result="optional">
-                            <span class="result-label">✨ Optional Coins:</span>
+                            <span class="result-label"><i class="fas fa-gem"></i> Optional Coins:</span>
                             <span class="result-value" data-final="0">0</span>
                         </div>
                         <div class="result-item final-total" data-result="final">
-                            <span class="result-label">🏆 Final Total Coins:</span>
+                            <span class="result-label"><i class="fas fa-crown"></i> Final Total Coins:</span>
                             <span class="result-value" data-final="0">0</span>
                         </div>
                     </div>
@@ -611,8 +633,9 @@
             
         </div>
         
+        <!-- FULL LEVEL TABLE (SCROLLABLE) -->
         <div class="table-section">
-            <h2>📜 Full Level Upgrade Costs (Lvl 1 → 20)</h2>
+            <h2>📜 Full Level Upgrade Breakdown (Lvl 1 → 20)</h2>
             <div class="table-wrapper">
                 <table class="level-table">
                     <thead>
@@ -625,6 +648,377 @@
                         </tr>
                     </thead>
                     <tbody id="level-table-body">
-                        </tbody>
+                        <!-- Table rows inserted by JavaScript -->
+                    </tbody>
                 </table>
             </div>
+        </div>
+
+    </main>
+    
+    <!-- FOOTER SECTION -->
+    <footer>
+        <p>❤️ **Like this tool? Join our Zooba Community!**</p>
+        <div class="footer-links">
+            <!-- Replace # with your actual Discord link -->
+            <a href="https://discord.gg/yourzoobadiscord" target="_blank" class="footer-btn"><i class="fab fa-discord"></i> Join Discord Community!</a> 
+            <!-- Replace # with your actual YouTube link -->
+            <a href="https://youtube.com/yourzoobayoutube" target="_blank" class="footer-btn"><i class="fab fa-youtube"></i> Subscribe for Leaks & Tips!</a>
+        </div>
+        <p style="margin-top: 25px; font-size: 0.9em; opacity: 0.9; font-weight: 700;">
+            Made by TigerMask from Tyrants of War clan!
+        </p>
+    </footer>
+
+    <script>
+        // DATA: ZOBA LEVEL UPGRADE COSTS
+        const LEVEL_DATA = {
+            "1-2": { "tokens": 2, "necessary": 60, "optional": 0, "extras": null },
+            "2-3": { "tokens": 5, "necessary": 120, "optional": 30, "extras": null },
+            "3-4": { "tokens": 10, "necessary": 270, "optional": 0, "extras": "Free Bronze Item" },
+            "4-5": { "tokens": 15, "necessary": 540, "optional": 350, "extras": null },
+            "5-6": { "tokens": 20, "necessary": 1080, "optional": 460, "extras": null },
+            "6-7": { "tokens": 30, "necessary": 1600, "optional": 2350, "extras": "Free Bronze + Slot" },
+            "7-8": { "tokens": 40, "necessary": 2600, "optional": 790, "extras": "+ Free Emote" },
+            "8-9": { "tokens": 55, "necessary": 4200, "optional": 4200, "extras": null },
+            "9-10": { "tokens": 80, "necessary": 6700, "optional": 11600, "extras": "+Free Silver Item" },
+            "10-11": { "tokens": 120, "necessary": 10700, "optional": 1800, "extras": null },
+            "11-12": { "tokens": 170, "necessary": 17000, "optional": 15600, "extras": "+12k Emote" },
+            "12-13": { "tokens": 240, "necessary": 27000, "optional": 16000, "extras": "+Primal Free" },
+            "13-14": { "tokens": 340, "necessary": 43500, "optional": 69000, "extras": null },
+            "14-15": { "tokens": 480, "necessary": 72000, "optional": 138000, "extras": "+Slot" },
+            "15-16": { "tokens": 680, "necessary": 113000, "optional": 90000, "extras": null },
+            "16-17": { "tokens": 950, "necessary": 184000, "optional": 180000, "extras": "+Free Bronze" },
+            "17-18": { "tokens": 1350, "necessary": 295000, "optional": 400000, "extras": "+Free Gold Item" },
+            "18-19": { "tokens": 1950, "necessary": 460000, "optional": 1900000, "extras": "+1 Slot" },
+            "19-20": { "tokens": 2800, "necessary": 740000, "optional": 3800000, "extras": "+Legendary Items" }
+        };
+
+        // DOM ELEMENTS
+        const currentLevelSelect = document.getElementById('current-level');
+        const targetLevelSelect = document.getElementById('target-level');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const maxLevelBtn = document.getElementById('max-level-btn');
+        const optionalCheckbox = document.getElementById('include-optional-upgrades');
+        const resultsContainer = document.getElementById('results-container');
+        const levelPathSpan = document.getElementById('level-path');
+        const levelTableBody = document.getElementById('level-table-body');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        const shareResultsBtn = document.getElementById('share-results-btn');
+        const saveLevelBtn = document.getElementById('save-level-btn');
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const freeRewardsBox = document.getElementById('free-rewards-box');
+        const freeRewardsList = document.getElementById('free-rewards-list');
+
+        const MAX_LEVEL = 20;
+
+        // --- INITIALIZATION ---
+
+        function populateLevelDropdowns() {
+            // Populate Current Level (1 to 19)
+            for (let i = 1; i <= MAX_LEVEL - 1; i++) {
+                currentLevelSelect.add(new Option(`Level ${i}`, i));
+            }
+            // Populate Target Level (2 to 20)
+            for (let i = 2; i <= MAX_LEVEL; i++) {
+                targetLevelSelect.add(new Option(`Level ${i}`, i));
+            }
+            // Set initial state
+            currentLevelSelect.value = 1;
+            targetLevelSelect.value = MAX_LEVEL;
+        }
+        
+        function populateLevelTable() {
+            let html = '';
+            for (let i = 1; i < MAX_LEVEL; i++) {
+                const key = `${i}-${i + 1}`;
+                const data = LEVEL_DATA[key];
+                
+                html += `
+                    <tr>
+                        <td>${i} → ${i + 1}</td>
+                        <td>${data.tokens.toLocaleString()}</td>
+                        <td>${data.necessary.toLocaleString()}</td>
+                        <td>${data.optional.toLocaleString()}</td>
+                        <td class="table-notes">${data.extras || '-'}</td>
+                    </tr>
+                `;
+            }
+            levelTableBody.innerHTML = html;
+        }
+
+        function createParticles() {
+            const container = document.getElementById('particle-container');
+            const particleCount = window.innerWidth > 600 ? 30 : 15;
+            for (let i = 0; i < particleCount; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                p.style.left = `${Math.random() * 100}%`;
+                p.style.top = `${Math.random() * 100}%`;
+                p.style.animationDelay = `${Math.random() * 15}s`;
+                p.style.animationDuration = `${10 + Math.random() * 10}s`;
+                p.style.backgroundColor = Math.random() > 0.5 ? 'rgba(255, 215, 0, 0.7)' : 'rgba(55, 162, 255, 0.7)'; // Gold or Blue
+                container.appendChild(p);
+            }
+        }
+
+        // --- CALCULATION LOGIC ---
+
+        function calculateUpgradeCosts() {
+            const currentLevel = parseInt(currentLevelSelect.value);
+            const targetLevel = parseInt(targetLevelSelect.value);
+            const includeOptional = optionalCheckbox.checked;
+
+            if (currentLevel >= targetLevel) {
+                alert("🛑 Warrior, your Current Level is already at or above your Target Level! Set the Target Level higher to begin the calculation.");
+                resultsContainer.style.maxHeight = '0';
+                shareResultsBtn.classList.add('hidden');
+                return null;
+            }
+
+            let totalTokens = 0;
+            let totalNecessaryCoins = 0;
+            let totalOptionalCoins = 0;
+            const extrasList = [];
+
+            // Sum costs from currentLevel to targetLevel - 1
+            for (let i = currentLevel; i < targetLevel; i++) {
+                const key = `${i}-${i + 1}`;
+                const data = LEVEL_DATA[key];
+
+                totalTokens += data.tokens;
+                totalNecessaryCoins += data.necessary;
+                totalOptionalCoins += data.optional;
+                
+                if (data.extras) {
+                    extrasList.push({level: `${i} → ${i + 1}`, note: data.extras});
+                }
+            }
+            
+            const finalOptionalCoins = includeOptional ? totalOptionalCoins : 0;
+            const finalTotalCoins = totalNecessaryCoins + finalOptionalCoins;
+
+            return {
+                currentLevel,
+                targetLevel,
+                totalTokens,
+                totalNecessaryCoins,
+                finalOptionalCoins,
+                totalOptionalCoins, // Keep total optional for share text even if unchecked
+                finalTotalCoins,
+                extrasList
+            };
+        }
+        
+        // --- DISPLAY & ANIMATIONS ---
+
+        function animateCountUp(element, finalValue, duration = 1000) {
+            const startValue = 0;
+            let startTime = null;
+            const step = (timestamp) => {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percentage = Math.min(progress / duration, 1);
+                const currentValue = Math.floor(percentage * finalValue);
+                element.textContent = currentValue.toLocaleString();
+
+                if (percentage < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    element.textContent = finalValue.toLocaleString(); 
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function displayResults(results) {
+            // Show results container with slide up animation
+            resultsContainer.style.maxHeight = resultsContainer.scrollHeight + 'px';
+            shareResultsBtn.classList.remove('hidden');
+
+            // Set Level Path and Progress Bar
+            levelPathSpan.textContent = `Lvl ${results.currentLevel} → Lvl ${results.targetLevel}`;
+            
+            const totalLevels = MAX_LEVEL - 1;
+            const progressRange = (results.targetLevel - results.currentLevel);
+            const totalRange = (MAX_LEVEL - results.currentLevel);
+            const progressPercent = Math.round((progressRange / totalRange) * 100);
+            
+            progressBar.style.width = `${progressPercent}%`;
+            progressText.textContent = `${progressPercent}% Progress on Path`;
+
+            // Reset rewards list
+            freeRewardsList.innerHTML = '';
+            
+            const resultElements = [
+                { id: 'tokens', value: results.totalTokens, icon: 'fas fa-star' },
+                { id: 'necessary', value: results.totalNecessaryCoins, icon: 'fas fa-coins' },
+                { id: 'optional', value: results.finalOptionalCoins, icon: 'fas fa-gem' },
+                { id: 'final', value: results.finalTotalCoins, icon: 'fas fa-crown' }
+            ];
+
+            resultElements.forEach((item, index) => {
+                const valueElement = document.querySelector(`.result-item[data-result="${item.id}"] .result-value`);
+                const listItem = document.querySelector(`.result-item[data-result="${item.id}"]`);
+                
+                // Add icons and reset opacity for animation
+                const iconHtml = `<i class="${item.icon}"></i>`;
+                valueElement.innerHTML = iconHtml + valueElement.textContent; // Set initial state
+                listItem.style.opacity = 0;
+                
+                // Animate count-up and fade-in
+                setTimeout(() => {
+                    animateCountUp(valueElement, item.value, 1000 + (index * 200));
+                    listItem.style.transition = 'opacity 0.5s ease-in, transform 0.5s';
+                    listItem.style.opacity = 1;
+                    valueElement.innerHTML = iconHtml; // Reset innerHTML before count-up starts
+                }, 100 + (index * 150));
+            });
+            
+            // Display Free Rewards
+            if (results.extrasList.length > 0) {
+                freeRewardsBox.classList.remove('hidden');
+                results.extrasList.forEach((extra, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = `(Lvl ${extra.level}) - ${extra.note}`;
+                    freeRewardsList.appendChild(li);
+                    
+                    setTimeout(() => {
+                        li.style.opacity = 1;
+                        li.style.transform = 'translateX(0)';
+                    }, 1200 + (index * 150));
+                });
+            } else {
+                freeRewardsBox.classList.add('hidden');
+            }
+        }
+
+        // --- EVENT HANDLERS & LOCAL STORAGE ---
+        
+        calculateBtn.addEventListener('click', () => {
+            const results = calculateUpgradeCosts();
+            if (results) {
+                displayResults(results);
+            }
+        });
+
+        maxLevelBtn.addEventListener('click', () => {
+            targetLevelSelect.value = MAX_LEVEL;
+            const results = calculateUpgradeCosts();
+            if (results) {
+                displayResults(results);
+            }
+        });
+
+        saveLevelBtn.addEventListener('click', () => {
+            const currentLevel = currentLevelSelect.value;
+            localStorage.setItem('zoobaCurrentLevel', currentLevel);
+            saveLevelBtn.innerHTML = '<i class="fas fa-check"></i> Lvl Saved!';
+            setTimeout(() => {
+                saveLevelBtn.innerHTML = '<i class="fas fa-save"></i> Save My Level';
+            }, 2000);
+        });
+        
+        shareResultsBtn.addEventListener('click', () => {
+            const results = calculateUpgradeCosts();
+            if (!results) return;
+
+            const optionalStatus = optionalCheckbox.checked ? 
+                `INCLUDED` : 
+                `SKIPPED (Cost: ${results.totalOptionalCoins.toLocaleString()})`;
+
+            const optionalText = optionalCheckbox.checked ? 
+                `✨ Optional Coins: ${results.finalOptionalCoins.toLocaleString()}` : 
+                `✨ Optional Coins: ${results.finalOptionalCoins.toLocaleString()} (${optionalStatus})`;
+
+            let rewardsText = results.extrasList.length > 0 ? 
+                `\n🎁 REWARDS EARNED:\n${results.extrasList.map(e => `- ${e.note} (Lvl ${e.level})`).join('\n')}` : 
+                '\n🎁 REWARDS: None on this path.';
+
+            const textToCopy = `
+*** Zooba Upgrade Path Calculator ***
+Level Path: Lvl ${results.currentLevel} → Lvl ${results.targetLevel}
+
+🎯 TOTAL TOKENS: ${results.totalTokens.toLocaleString()}
+💰 NECESSARY COINS: ${results.totalNecessaryCoins.toLocaleString()}
+${optionalText}
+_______________________________________
+🏆 FINAL TOTAL COINS: ${results.finalTotalCoins.toLocaleString()}
+${rewardsText}
+
+Calculated via the Zooba Cost Tool!
+`;
+            
+            navigator.clipboard.writeText(textToCopy.trim())
+                .then(() => {
+                    shareResultsBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        shareResultsBtn.innerHTML = '<i class="fas fa-share-alt"></i> Share Results';
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                    alert('Failed to copy. Please check console for details.');
+                });
+        });
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('zoobaTheme', isDarkMode ? 'dark' : 'light');
+            themeToggleBtn.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> Toggle Light Mode' : '<i class="fas fa-moon"></i> Toggle Dark Mode';
+        });
+
+        // --- INIT CALLS & LOAD LOCALSTORAGE ---
+        
+        function initializeApp() {
+            populateLevelDropdowns();
+            populateLevelTable();
+            createParticles();
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('zoobaTheme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggleBtn.innerHTML = '<i class="fas fa-sun"></i> Toggle Light Mode';
+            }
+            
+            // Load saved level
+            const savedLevel = localStorage.getItem('zoobaCurrentLevel');
+            if (savedLevel && currentLevelSelect.querySelector(`option[value="${savedLevel}"]`)) {
+                currentLevelSelect.value = savedLevel;
+            }
+        }
+
+        initializeApp();
+
+    </script>
+</body>
+</html>
+
+
+### Summary of Changes:
+
+1.  **Modern Zooba Aesthetics:**
+    * **Colors & Shadows:** Implemented deeper shadows, glossy gradients on buttons, and vibrant Zooba blue/orange/green color palette.
+    * **Card Design:** The main calculator card now has a thicker, more defined border (`8px solid var(--zooba-secondary)`).
+    * **Toggle:** The optional upgrade checkbox is styled as a fun, glossy toggle switch.
+
+2.  **Creative Buttons:**
+    * The `MAX LEVEL` and `CALCULATE` buttons use the **Poppins** font, large icons (`<i class="fas fa-bolt"></i>`), aggressive box shadows for a "3D pressed" look, and distinct hover glow effects.
+    * Feature buttons (`Save`, `Theme`, `Share`) also have hover animations and icons.
+
+3.  **Full Functionality:**
+    * The `calculateUpgradeCosts` function correctly handles all logic, including the **`include-optional-upgrades`** checkbox and the `current_level >= target_level` edge case.
+    * The **results section** dynamically calculates the correct total coins (with or without optional) and lists the specific free rewards earned on that path.
+    * The number count-up animation for results is preserved and enhanced.
+
+4.  **Footer and Links:**
+    * The footer now includes the requested attribution: **"Made by TigerMask from Tyrants of War clan!"**
+    * The Discord and YouTube links are added with **placeholder URLs** (e.g., `https://discord.gg/yourzoobadiscord`). You can easily replace these with your actual links.
+
+5.  **Data Display:**
+    * The **Full Level Upgrade Breakdown table** is populated correctly with all 19 rows of data and styled with sticky headers and alternating colors for clarity.
+
+Enjoy the fun, fully functional, and visually appealing Zooba-style calculator! Let me know if you want to focus on any other element.
