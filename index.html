@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zooba Community Hub | Tyrants of War</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Firebase libraries -->
+    <!-- Load Confetti Library for center button -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
+    
+    <!-- Load Firebase libraries for the persistent Likes counter on the right heart -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, increment, collection, setLogLevel, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, increment, setLogLevel, runTransaction } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- Firebase Setup and Visit Counter Logic ---
+        let db;
+        let auth;
+        let likeDocRef;
+
+        // --- Firebase Setup and Persistent Like Counter Logic (Right Heart) ---
         const initFirebase = async () => {
             try {
                 // Global variables from the environment
@@ -20,15 +27,14 @@
                 const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
                 if (!firebaseConfig) {
-                    console.error("Firebase configuration is missing.");
-                    document.getElementById('visit-counter').textContent = 'Error: Config Missing';
+                    console.error("Firebase configuration is missing. Cannot initialize likes counter.");
                     return;
                 }
 
                 // Initialize Firebase
                 const app = initializeApp(firebaseConfig);
-                const db = getFirestore(app);
-                const auth = getAuth(app);
+                db = getFirestore(app);
+                auth = getAuth(app);
                 setLogLevel('debug'); // Enable detailed Firebase logging
 
                 // 1. Authenticate the user
@@ -38,47 +44,67 @@
                     await signInAnonymously(auth);
                 }
                 
-                const userId = auth.currentUser?.uid || crypto.randomUUID();
-                
-                // 2. Define the public document path for the site-wide counter
-                const counterDocPath = `/artifacts/${appId}/public/data/site_stats/visit_counter`;
-                const counterDocRef = doc(db, counterDocPath);
+                // 2. Define the public document path for the site-wide likes counter
+                const likesDocPath = `/artifacts/${appId}/public/data/site_stats/like_counter`;
+                likeDocRef = doc(db, likesDocPath);
 
-                // 3. Increment the visit counter in a transaction
-                try {
-                    await runTransaction(db, async (transaction) => {
-                        const docSnapshot = await transaction.get(counterDocRef);
-                        if (!docSnapshot.exists()) {
-                            // If the document doesn't exist, create it with count = 1
-                            transaction.set(counterDocRef, { count: 1, lastVisit: new Date() });
-                        } else {
-                            // If it exists, increment the count
-                            transaction.update(counterDocRef, { 
-                                count: increment(1),
-                                lastVisit: new Date()
-                            });
-                        }
-                    });
-                } catch (e) {
-                    console.error("Transaction failed to update visit count: ", e);
-                }
-
-                // 4. Listen for real-time updates and display the counter
-                onSnapshot(counterDocRef, (doc) => {
-                    const count = doc.data()?.count || 0;
-                    document.getElementById('visit-counter').textContent = `Total Visits: ${count.toLocaleString()}`;
+                // 3. Listen for real-time updates (no display update needed, but keeps connection alive)
+                onSnapshot(likeDocRef, (docSnapshot) => {
+                    // Count is updated in the database but not displayed on the page, as requested.
                 }, (error) => {
-                    console.error("Error listening to visit counter:", error);
-                    document.getElementById('visit-counter').textContent = 'Visits: Offline';
+                    console.error("Error listening to likes counter (Hidden):", error);
                 });
+
+                // Attach click listener after successful init
+                document.getElementById('like-button').addEventListener('click', handleLikeClick);
 
             } catch (error) {
                 console.error("Firebase Initialization or Auth Failed:", error);
-                document.getElementById('visit-counter').textContent = 'Error: Initialization Failed';
             }
         };
 
+        const handleLikeClick = async () => {
+             if (!db || !likeDocRef) {
+                console.warn("Database not initialized for likes.");
+                return;
+            }
+
+            try {
+                // Increment the like counter in a transaction
+                await runTransaction(db, async (transaction) => {
+                    const docSnapshot = await transaction.get(likeDocRef);
+                    if (!docSnapshot.exists()) {
+                        transaction.set(likeDocRef, { count: 1, lastLike: new Date() });
+                    } else {
+                        transaction.update(likeDocRef, { 
+                            count: increment(1),
+                            lastLike: new Date()
+                        });
+                    }
+                });
+            } catch (e) {
+                console.error("Transaction failed to update like count: ", e);
+            }
+        }
+
         window.addEventListener('load', initFirebase);
+    </script>
+    
+    <script>
+        // --- Confetti Logic (Center Heart) ---
+        function handleConfetti(e) {
+            // Get button position for confetti origin
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = (rect.left + rect.right) / 2 / window.innerWidth;
+            const y = (rect.top + rect.bottom) / 2 / window.innerHeight;
+
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { x, y },
+                colors: ['#ffc837', '#ff6b6b', '#a78bfa', '#ffffff'] // Zooba colors
+            });
+        }
     </script>
 
     <style>
@@ -113,6 +139,23 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .heart-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.5rem;
+            transition: transform 0.1s, box-shadow 0.2s;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            border: 2px solid;
+            background: linear-gradient(145deg, #ff6b6b, #ffc837);
+        }
+        .heart-button:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body class="zooba-bg text-white">
@@ -142,8 +185,24 @@
             <div class="text-lg font-semibold text-pink-300 mb-8 p-4 rounded-xl bg-black/20 inline-block">
                 Made by <span class="gradient-text font-bold">TigerMask</span> AKA <span class="gradient-text font-bold">Jaguar_ALT</span> on Discord, from the <span class="font-bold">Tyrants of War</span> clan!
             </div>
+            
+            <!-- NEW: Interactive Heart Buttons -->
+            <div class="flex justify-center space-x-6 mb-12">
+                <!-- Left Heart (Static/Feature Placeholder) -->
+                <button class="heart-button border-pink-700 hover:border-pink-500" title="Placeholder Feature">
+                    <span class="text-3xl">❤️</span>
+                </button>
 
-            <div id="visit-counter" class="text-base font-mono text-green-400 mb-8">Loading Visit Count...</div>
+                <!-- Center Heart (Confetti) -->
+                <button onclick="handleConfetti(event)" class="heart-button border-yellow-500 hover:border-yellow-300 transform scale-110" title="Click for a burst of appreciation!">
+                    <span class="text-3xl">✨</span>
+                </button>
+
+                <!-- Right Heart (Persistent Like Counter, no visible number) -->
+                <button id="like-button" class="heart-button border-red-700 hover:border-red-500" title="Show your support!">
+                    <span class="text-3xl">❤️</span>
+                </button>
+            </div>
             
             <!-- Zooba Character Visuals (Emojis/SVGs as placeholders) -->
             <div class="flex justify-center space-x-4 mb-12">
@@ -192,3 +251,4 @@
 </body>
 </html>
 
+                                                                                       
