@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZooBot - Complete Documentation</title>
+    <style>
+        :root {
+            --bg-color: #1e1e2e;
+            --surface-color: #27293d;
+            --text-color: #cdd6f4;
+            --accent-color: #89b4fa;
+            --accent-hover: #74c7ec;
+            --green: #a6e3a1;
+            --red: #f38ba8;
+            --yellow: #f9e2af;
+            --code-bg: #45475a;
+        }
+
+        /* --- Reset & Globals --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        body {
+            display: flex;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+            line-height: 1.3;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; border-bottom: 2px solid var(--surface-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; color: var(--accent-hover); }
+        h4 { font-size: 1.1rem; color: var(--yellow); }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Code & Preformatted --- */
+        code {
+            background-color: var(--code-bg);
+            color: var(--yellow);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.95em;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: var(--text-color);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* --- Table Styling --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background-color: var(--surface-color);
+        }
+
+        th, td {
+            border: 1px solid var(--code-bg);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--code-bg);
+            color: var(--accent-color);
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: var(--surface-color);
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #31334a;
+        }
+
+        /* --- Layout: Sidebar Navigation --- */
+        #sidebar {
+            width: 280px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: var(--surface-color);
+            border-right: 2px solid var(--code-bg);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        #sidebar h1 {
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #sidebar nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #sidebar nav li {
+            margin: 0.5rem 0;
+        }
+
+        #sidebar nav a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        #sidebar nav a:hover {
+            background-color: var(--code-bg);
+            text-decoration: none;
+        }
+
+        /* --- Layout: Main Content --- */
+        main {
+            margin-left: 280px; /* Same as sidebar width */
+            padding: 2rem 3rem;
+            width: calc(100% - 280px);
+        }
+
+        section {
+            margin-bottom: 3rem;
+            padding-top: 60px; /* Offset for scroll-spy highlighting */
+            margin-top: -60px; /* Counteract the padding */
+        }
+        
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-hover) 100%);
+            color: var(--bg-color);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            color: var(--bg-color);
+            margin: 0;
+            font-size: 3rem;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .hero .cta {
+            display: inline-block;
+            background-color: var(--bg-color);
+            color: var(--accent-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .hero .cta:hover {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: 3rem;
+            border-top: 2px solid var(--surface-color);
+            padding-top: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid var(--code-bg);
+            }
+            
+            #sidebar nav ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            #sidebar nav li {
+                margin: 0.25rem;
+            }
+
+            main {
+                margin-left: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+            
+            section {
+                padding-top: 20px;
+                margin-top: 0;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.3rem; }
+            
+            .hero h1 { font-size: 2.2rem; }
+            .hero p { font-size: 1.1rem; }
+            
+            main {
+                padding: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <h1>ZooBot Docs</h1>
+        <nav>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#getting-started">2. Getting Started</a></li>
+                <li><a href="#core-systems">3. Core Systems</a></li>
+                <li><a href="#commands-reference">4. Commands Reference</a></li>
+                <li><a href="#reward-systems">5. Reward Systems</a></li>
+                <li><a href="#battle-system">6. Battle System</a></li>
+                <li><a href="#admin-commands">7. Admin Commands</a></li>
+                <li><a href="#trading">Trading</a></li>
+                <li><a href="#quests">Quests</a></li>
+                <li><a href="#st-booster">ST Booster System</a></li>
+                <li><a href="#leaderboards">Leaderboards</a></li>
+                <li><a href="#mail-news">Mail & News</a></li>
+                <li><a href="#battle-mechanics">Battle Mechanics</a></li>
+                <li><a href="#tips">Tips & Strategies</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#version-history">Version History</a></li>
+                <li><a href="#support">Support</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+
+        <div class="hero">
+            <h1>Welcome to the ZooBot Documentation</h1>
+            <p>Your complete guide to collecting, battling, and conquering the zoo.</p>
+            <a href="#getting-started" class="cta">Start Your Journey!</a>
+        </div>
+
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            <p>This Discord bot features a character collection system with turn-based battles, quests, trading, and various reward mechanisms. Players can collect 51 unique characters, level them up, and compete in battles to earn trophies.</p>
+        </section>
+
+        <section id="getting-started">
+            <h2>2. Getting Started</h2>
+            <h3>Initial Setup</h3>
+            <ol>
+                <li>
+                    <strong>Start Your Journey:</strong> <code>!start</code>
+                    <p>Displays starter character options</p>
+                </li>
+                <li>
+                    <strong>Select Starter:</strong> <code>!select &lt;nix/bruce/buck&gt;</code>
+                    <p>Choose your first character from:</p>
+                    <ul>
+                        <li>🦊 Nix - The cunning fox</li>
+                        <li>🦍 Bruce - The mighty gorilla</li>
+                        <li>🐂 Buck - The strong bull</li>
+                    </ul>
+                    <p>Receive starting rewards:</p>
+                    <ul>
+                        <li>💰 100 Coins</li>
+                        <li>💎 10 Gems</li>
+                        <li>🏆 200 Trophies</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+
+        <section id="core-systems">
+            <h2>3. Core Systems</h2>
+            
+            <h3>Character System</h3>
+            <ul>
+                <li><strong>Total Characters:</strong> 51 unique characters with emojis</li>
+                <li><strong>Starter Characters:</strong> Nix, Bruce, Buck</li>
+                <li><strong>Obtainable Characters:</strong> Available through crates</li>
+            </ul>
+            
+            <h4>Character Stats</h4>
+            <p>Each character has unique stats:</p>
+            <ul>
+                <li><strong>ST (Strength):</strong> 1-100% (randomly assigned, affects HP and damage)</li>
+                <li><strong>Level:</strong> Starts at 1, increases with tokens and coins</li>
+                <li><strong>HP:</strong> Base HP ranges from 1000-1500, scales with ST</li>
+                <li><strong>Moves:</strong> 3 predetermined moves
+                    <ul>
+                        <li>1 special move (unique per character)</li>
+                        <li>2 moves from ST tier pool
+                            <ul>
+                                <li>Low tier: 1-40% ST</li>
+                                <li>Mid tier: 41-75% ST</li>
+                                <li>High tier: 76-100% ST</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Currency System</h3>
+            <ul>
+                <li>💰 <strong>Coins:</strong> Used for leveling up characters, obtained through various activities</li>
+                <li>💎 <strong>Gems:</strong> Premium currency for opening crates</li>
+                <li>🏆 <strong>Trophies:</strong> Competitive ranking, gained/lost in battles</li>
+                <li>🔷 <strong>Shards:</strong> Craft ST Boosters (8 shards = 1 booster)</li>
+                <li>🎫 <strong>Tokens:</strong> Character-specific, used for leveling</li>
+            </ul>
+
+            <h3>Leveling System</h3>
+            <p>Characters level up using both tokens AND coins:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Tokens Required</th>
+                        <th>Coins Required</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1→2</td>
+                        <td>2</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td>2→3</td>
+                        <td>5</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>3→4</td>
+                        <td>10</td>
+                        <td>150</td>
+                    </tr>
+                    <tr>
+                        <td>4→5</td>
+                        <td>15</td>
+                        <td>200</td>
+                    </tr>
+                    <tr>
+                        <td>5→6</td>
+                        <td>20</td>
+                        <td>300</td>
+                    </tr>
+                    <tr>
+                        <td>10→11</td>
+                        <td>120</td>
+                        <td>1,300</td>
+                    </tr>
+                    <tr>
+                        <td>15→16</td>
+                        <td>680</td>
+                        <td>4,300</td>
+                    </tr>
+                    <tr>
+                        <td>19→20</td>
+                        <td>2,800</td>
+                        <td>9,000</td>
+                    </tr>
+                    <tr>
+                        <td>20+</td>
+                        <td>+100/level</td>
+                        <td>+200/level</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Command:</strong> <code>!levelup &lt;character name&gt;</code></p>
+
+            <h3>Trophy System</h3>
+            <ul>
+                <li><strong>Starting Trophies:</strong> 200</li>
+                <li><strong>Battle Win:</strong> +5 trophies</li>
+                <li><strong>Battle Loss:</strong> -7 trophies</li>
+                <li><strong>Minimum:</strong> 0 (cannot go below zero)</li>
+                <li><strong>Maximum:</strong> 9,999</li>
+            </ul>
+        </section>
+
+        <section id="commands-reference">
+            <h2>4. Commands Reference</h2>
+
+            <h3>Profile & Characters</h3>
+            <p><strong><code>!profile [page]</code></strong></p>
+            <p>View your profile with:</p>
+            <ul>
+                <li>💰 Coins</li>
+                <li>💎 Gems</li>
+                <li>🏆 Trophies</li>
+                <li>🎮 Character count</li>
+                <li>💬 Message count</li>
+                <li>Character list with levels and progress</li>
+            </ul>
+
+            <p><strong><code>!char &lt;character name&gt;</code> or <code>!character &lt;name&gt;</code></strong></p>
+            <p>View detailed character information:</p>
+            <ul>
+                <li>Level and ST percentage</li>
+                <li>Token count and requirements</li>
+                <li>Coin requirements for next level</li>
+                <li>Progress bar</li>
+            </ul>
+
+            <p><strong><code>!i &lt;character name&gt;</code> or <code>!info &lt;name&gt;</code></strong></p>
+            <p>View character battle information:</p>
+            <ul>
+                <li>Moves and damage</li>
+                <li>HP and battle stats</li>
+                <li>Special move details</li>
+            </ul>
+
+            <p><strong><code>!levelup &lt;character name&gt;</code></strong></p>
+            <p>Level up a character (requires both tokens AND coins)</p>
+            <ul>
+                <li>Shows what you have vs. what you need</li>
+                <li>Deducts resources and levels up character</li>
+            </ul>
+
+            <p><strong><code>!release &lt;character name&gt;</code></strong></p>
+            <p>Release a character (minimum level 10)</p>
+            <ul>
+                <li>Permanently removes character from your collection</li>
+                <li>Cannot be undone</li>
+            </ul>
+        </section>
+        
+        <section id="battle-system">
+            <h2>6. Battle System</h2>
+            
+            <p><strong><code>!b @user</code> or <code>!battle @user</code></strong></p>
+            <p>Challenge another player to battle</p>
+
+            <h3>Battle Flow:</h3>
+            <ol>
+                <li>Send battle invite</li>
+                <li>Opponent accepts/declines (60 second timeout)</li>
+                <li>Both players select a character</li>
+                <li>Turn-based combat begins</li>
+                <li>Choose moves or flee</li>
+            </ol>
+
+            <h3>Move Restrictions:</h3>
+            <ul>
+                <li><strong>Normal Moves:</strong> Can be used any time</li>
+                <li><strong>Special Moves:</strong>
+                    <ul>
+                        <li>🔒 Unlocks after 3 turns</li>
+                        <li>⚡ Can only be used ONCE per battle</li>
+                        <li>💥 Enhanced damage with better ST scaling</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Trophy Rewards:</h3>
+            <ul>
+                <li><strong>Winner:</strong> +5 trophies</li>
+                <li><strong>Loser:</strong> -7 trophies</li>
+            </ul>
+
+            <h3>Battle Commands (during battle):</h3>
+            <ul>
+                <li>Type <code>1</code>, <code>2</code>, or <code>3</code> to use a move</li>
+                <li>Type <code>flight</code>, <code>flee</code>, or <code>run</code> to forfeit</li>
+            </ul>
+        </section>
+
+        <section id="reward-systems">
+            <h2>5. Reward Systems</h2>
+
+            <h3>Message Rewards</h3>
+            <p>Every 25 messages you send earns a random reward:</p>
+            <ul>
+                <li>Option 1: 1-10 tokens for a random character you own</li>
+                <li>Option 2: 1-20 coins</li>
+                <li>Option 3: 1-5 gems</li>
+            </ul>
+
+            <h3>Daily Rewards - <code>!daily</code></h3>
+            <p>Claim once every 24 hours:</p>
+            <ul>
+                <li>🏆 15 Trophies</li>
+                <li>💰 10-100 Coins (random)</li>
+                <li>💎 1-3 Gems (random)</li>
+            </ul>
+
+            <h3>Crate System - <code>!crate [type]</code></h3>
+            <p>Available Crates:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Crate Type</th>
+                        <th>Cost</th>
+                        <th>Character Chance</th>
+                        <th>Tokens</th>
+                        <th>Coins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🥇 Gold</td>
+                        <td>💎100</td>
+                        <td>1.5%</td>
+                        <td>50</td>
+                        <td>500</td>
+                    </tr>
+                    <tr>
+                        <td>🟢 Emerald</td>
+                        <td>💎250</td>
+                        <td>5%</td>
+                        <td>130</td>
+                        <td>1,800</td>
+                    </tr>
+                    <tr>
+                        <td>🔥 Legendary</td>
+                        <td>💎500</td>
+                        <td>10%</td>
+                        <td>200</td>
+                        <td>2,500</td>
+                    </tr>
+                    <tr>
+                        <td>👑 Tyrant</td>
+                        <td>💎750</td>
+                        <td>15%</td>
+                        <td>300</td>
+                        <td>3,500</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Usage:</strong> <code>!crate &lt;gold/emerald/legendary/tyrant&gt;</code></p>
+
+            <h3>Drop System - <code>!c &lt;code&gt;</code></h3>
+            <p>Drops appear in the designated drop channel every 20 seconds:</p>
+            <ul>
+                <li>🎫 Character tokens</li>
+                <li>💰 Coins</li>
+                <li>💎 Gems</li>
+                <li>🔷 Shards</li>
+            </ul>
+            <p><strong>Usage:</strong> Type <code>!c &lt;code&gt;</code> when a drop appears</p>
+        </section>
+
+        <section id="trading">
+            <h2>Trading</h2>
+            <p><strong><code>!t @user</code> or <code>!trade @user</code></strong></p>
+            <p>Trade coins and gems with other players:</p>
+            <ol>
+                <li>Initiate trade</li>
+                <li>Use <code>!offer coins &lt;amount&gt;</code> or <code>!offer gems &lt;amount&gt;</code></li>
+                <li>Both players <code>!confirm</code> when ready</li>
+                <li>Use <code>!cancel</code> to abort</li>
+            </ol>
+            <p>60 second timeout</p>
+        </section>
+
+        <section id="quests">
+            <h2>Quests</h2>
+            <p><strong><code>!quests [page]</code></strong></p>
+            <p>Complete quests for rewards:</p>
+            <ul>
+                <li><strong>View quests:</strong> <code>!quests [page]</code></li>
+                <li><strong>Quest details:</strong> <code>!quest &lt;id&gt;</code></li>
+                <li><strong>Claim rewards:</strong> <code>!claim &lt;id&gt;</code></li>
+            </ul>
+            <h4>Quest types:</h4>
+            <ul>
+                <li>First Steps</li>
+                <li>Drop Hunter (I, II, III, Master)</li>
+                <li>Battle achievements</li>
+                <li>Character collection milestones</li>
+            </ul>
+        </section>
+
+        <section id="st-booster">
+            <h2>ST Booster System</h2>
+            <p><strong><code>!shards</code></strong></p>
+            <p>View shard information and booster count</p>
+
+            <p><strong><code>!craft</code></strong></p>
+            <p>Craft an ST Booster (costs 8 shards)</p>
+
+            <p><strong><code>!boost &lt;character name&gt;</code></strong></p>
+            <p>Use an ST Booster on a character</p>
+
+            <h4>Boost Tiers:</h4>
+            <ul>
+                <li>75% - Common: +5-10% ST</li>
+                <li>20% - Rare: +10-18% ST</li>
+                <li>5% - Legendary: +18-25% ST</li>
+            </ul>
+            <p>Note: HP and moves recalculate after boosting!</p>
+        </section>
+
+        <section id="leaderboards">
+            <h2>Leaderboards</h2>
+            <p><strong><code>!leaderboard &lt;type&gt;</code> or <code>!lb &lt;type&gt;</code></strong></p>
+            <p>View top 10 players:</p>
+            <ul>
+                <li>Coins: <code>!lb coins</code></li>
+                <li>Gems: <code>!lb gems</code></li>
+                <li>Trophies: <code>!lb trophies</code></li>
+                <li>Battle Wins: <code>!lb battles</code></li>
+                <li>Collection: <code>!lb collection</code></li>
+            </ul>
+        </section>
+
+        <section id="mail-news">
+            <h2>Mail & News</h2>
+            <p><strong><code>!mail [page]</code> or <code>!mailbox [page]</code></strong></p>
+            <p>View your inbox</p>
+            
+            <p><strong><code>!claimmail &lt;number&gt;</code></strong></p>
+            <p>Claim mail rewards</p>
+
+            <p><strong><code>!news [count]</code></strong></p>
+            <p>View latest announcements (default: 5 latest)</p>
+        </section>
+
+        <section id="admin-commands">
+            <h2>7. Admin Commands</h2>
+
+            <h3>Channel Setup</h3>
+            <p><strong><code>!setdrop</code></strong></p>
+            <p>Set current channel as drop channel<br>Drops will appear here every 20 seconds</p>
+
+            <p><strong><code>!setbattle</code></strong></p>
+            <p>Set current channel as battle channel<br>Players can use battle commands here</p>
+
+            <p><strong><code>!startdrops</code></strong></p>
+            <p>Start the drop system (requires drop channel)</p>
+
+            <p><strong><code>!stopdrops</code></strong></p>
+            <p>Stop the drop system</p>
+
+            <h3>Resource Management</h3>
+            <p><strong><code>!grant @user &lt;coins/gems&gt; &lt;amount&gt;</code></strong></p>
+            <p>Grant coins or gems to a player</p>
+            <pre><code>!grant @Player coins 1000
+!grant @Player gems 50</code></pre>
+
+            <p><strong><code>!grant @user tokens &lt;character name&gt; &lt;amount&gt;</code></strong></p>
+            <p>Grant character tokens to a player</p>
+            <pre><code>!grant @Player tokens Nix 100</code></pre>
+
+            <p><strong><code>!grantchar @user &lt;character name&gt;</code></strong></p>
+            <p>Grant a character to a player<br>Assigns random ST and moves<br>Handles pending tokens</p>
+            <pre><code>!grantchar @Player Duke</code></pre>
+
+            <p><strong><code>!settrophies @user &lt;amount&gt;</code></strong></p>
+            <p>Set a player's trophy count</p>
+            <pre><code>!settrophies @Player 500</code></pre>
+
+            <h3>Communication</h3>
+            <p><strong><code>!sendmail</code></strong></p>
+            <p>Shows format for sending mail to all players<br>Format:</p>
+            <pre><code>!sendmail &lt;message&gt; | coins:&lt;amount&gt; gems:&lt;amount&gt; shards:&lt;amount&gt; character:&lt;name&gt; goldcrates:&lt;amount&gt;</code></pre>
+            <p>Example:</p>
+            <pre><code>!sendmail Happy holidays! | coins:500 gems:50 shards:5</code></pre>
+
+            <p><strong><code>!postnews</code></strong></p>
+            <p>Shows format for posting news announcements<br>Format:</p>
+            <pre><code>!postnews &lt;title&gt; | &lt;content&gt;</code></pre>
+            <p>Example:</p>
+            <pre><code>!postnews New Features! | Quests and ST Boosters are now available!</code></pre>
+        </section>
+
+        <section id="battle-mechanics">
+            <h2>Battle Mechanics Deep Dive</h2>
+            
+            <h3>HP Calculation</h3>
+            <ul>
+                <li>Base HP: 1000-1500 (random)</li>
+                <li>Scales with ST percentage</li>
+                <li>Higher ST = More HP</li>
+            </ul>
+
+            <h3>Damage Calculation</h3>
+            <ul>
+                <li>Affected by move power</li>
+                <li>Scales with character level</li>
+                <li>Scales with ST percentage</li>
+                <li>Special moves have enhanced ST scaling</li>
+            </ul>
+
+            <h3>Battle Flow</h3>
+            <ol>
+                <li><strong>Invite Phase:</strong> 60 seconds to accept/decline</li>
+                <li><strong>Selection Phase:</strong> 120 seconds to choose character</li>
+                <li><strong>Combat Phase:</strong>
+                    <ul>
+                        <li>Turn-based</li>
+                        <li>60 seconds per turn</li>
+                        <li>Turn counter starts at 0</li>
+                        <li>Special moves unlock at turn 3</li>
+                    </ul>
+                </li>
+                <li><strong>Victory:</strong> Battle ends when HP reaches 0 or player flees</li>
+            </ol>
+
+            <h3>Move Types</h3>
+            <ul>
+                <li><strong>Attack Moves:</strong> Deal damage to opponent</li>
+                <li><strong>Heal Moves:</strong> Restore your HP (negative damage)</li>
+                <li><strong>Support Moves:</strong> Zero damage (buff/debuff effects)</li>
+            </ul>
+        </section>
+
+        <section id="tips">
+            <h2>Tips & Strategies</h2>
+
+            <h3>Leveling Strategy</h3>
+            <ul>
+                <li>Save coins for important level-ups</li>
+                <li>Focus on characters with high ST</li>
+                <li>Complete quests for free coins</li>
+            </ul>
+
+            <h3>Battle Strategy</h3>
+            <ul>
+                <li>Save special moves for critical moments</li>
+                <li>Know your opponent's character</li>
+                <li>Higher level = more damage</li>
+                <li>Higher ST = more damage and HP</li>
+            </ul>
+
+            <h3>Trophy Climbing</h3>
+            <ul>
+                <li>Play battles strategically</li>
+                <li>Each win is +5, each loss is -7</li>
+                <li>Daily rewards give +15 trophies</li>
+                <li>Minimum is 0, so no risk of going negative</li>
+            </ul>
+
+            <h3>Resource Management</h3>
+            <ul>
+                <li>Open crates when you need specific characters</li>
+                <li>Trade with other players for quick coins/gems</li>
+                <li>Catch drops regularly for free resources</li>
+                <li>Check in daily for login rewards</li>
+            </ul>
+        </section>
+
+        <section id="faq">
+            <h2>FAQ</h2>
+
+            <h4>Q: How do I get more characters?</h4>
+            <p>A: Open crates with gems or receive them from admin grants/mail</p>
+
+            <h4>Q: Can I lose trophies?</h4>
+            <p>A: Yes, you lose 7 trophies per battle loss, but cannot go below 0</p>
+
+            <h4>Q: What happens if I release a character?</h4>
+            <p>A: The character is permanently deleted (requires level 10+)</p>
+            
+            <h4>Q: How often can I claim daily rewards?</h4>
+            <p>A: Once every 24 hours</p>
+
+            <h4>Q: Can special moves be used multiple times?</h4>
+            <p>A: No, special moves can only be used once per battle and only after turn 3</p>
+
+            <h4>Q: Do message rewards work in DMs?</h4>
+            <p>A: No, only messages in the server count</p>
+
+            <h4>Q: What's the best crate to open?</h4>
+            <p>A: Tyrant crates have the highest character chance (15%) but cost the most gems</p>
+
+            <h4>Q: Can I trade characters?</h4>
+            <p>A: No, only coins and gems can be traded</p>
+        </section>
+
+        <section id="version-history">
+            <h2>Version History</h2>
+
+            <h3>Current Version Features</h3>
+            <ul>
+                <li>✅ Message reward system (every 25 messages)</li>
+                <li>✅ Leveling requires coins + tokens</li>
+                <li>✅ Trophy system with battle rewards/penalties</li>
+                <li>✅ Daily login rewards</li>
+                <li>✅ Special move cooldown (3 turns, once per battle)</li>
+                <li>✅ Admin commands: setbattle, settrophies</li>
+                <li>✅ Trophy leaderboard</li>
+            </ul>
+
+            <h3>Core Features</h3>
+            <ul>
+                <li>51 unique characters</li>
+                <li>Turn-based battle system</li>
+                <li>Quest system</li>
+                <li>Crate system</li>
+                <li>Drop system</li>
+                <li>Trading system</li>
+                <li>ST Booster system</li>
+                <li>Mail system</li>
+                <li>News system</li>
+                <li>Leaderboards</li>
+            </ul>
+        </section>
+
+        <section id="support">
+            <h2>Support</h2>
+            <p>For issues or questions, contact the server administrators.</p>
+            <p><strong>Prefix:</strong> <code>!</code></p>
+            <p><strong>Help Command:</strong> <code>!help</code></p>
+        </section>
+        
+        <footer>
+            <p>ZooBot Documentation &copy; 2025</p>
+            <p>Documentation last updated: October 2025</p>
+        </footer>
+
+    </main>
+
+</body>
+</html>
